@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextEdit" name="NameTestEdit">
+   <widget class="QTextEdit" name="textEditName">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -58,7 +58,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QTextEdit" name="NameQuestEdit">
+      <widget class="QTextEdit" name="nameQuestEdit">
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -110,14 +110,14 @@ p, li { white-space: pre-wrap; }
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="BackButton">
+      <widget class="QPushButton" name="backButton">
        <property name="text">
         <string>Назад</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="NextButton">
+      <widget class="QPushButton" name="nextButton">
        <property name="text">
         <string>Вперёд</string>
        </property>
@@ -129,9 +129,9 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>120</y>
       <width>501</width>
-      <height>291</height>
+      <height>281</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -143,40 +143,44 @@ p, li { white-space: pre-wrap; }
        <x>0</x>
        <y>0</y>
        <width>499</width>
-       <height>289</height>
+       <height>279</height>
       </rect>
      </property>
-     <layout class="QFormLayout" name="formLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox">
-        <property name="text">
-         <string>1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox_2">
-        <property name="text">
-         <string>2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QFormLayout" name="AnswerLayout">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="checkBox_2">
+          <property name="text">
+           <string>2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit_2">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
