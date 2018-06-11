@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->BackButton->setEnabled(false);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
+    ui->EndButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +40,7 @@ void MainWindow::on_NextButton_clicked()
 {
     if (NUMG+1==QuesNUM){
         ui->NextButton->setEnabled(false);
+        ui->EndButton->setEnabled(true);
     }
     else {
         ui->BackButton->setEnabled(true);
