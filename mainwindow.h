@@ -19,6 +19,8 @@ private slots:
     void on_NextButton_clicked();
     void on_BackButton_clicked();
     void on_EndButton_clicked();
+    void on_LoadFile_clicked();
+    void on_Test_clicked();
 
 private:
     Ui::MainWindow *ui;

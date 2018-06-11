@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextEdit" name="textEditName">
+   <widget class="QTextEdit" name="TestNameEdit">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -46,7 +46,7 @@ p, li { white-space: pre-wrap; }
       <x>10</x>
       <y>50</y>
       <width>501</width>
-      <height>73</height>
+      <height>98</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -96,7 +96,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>Завершить проходдение теста</string>
+     <string>Завершить прохождение теста</string>
     </property>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
@@ -195,17 +195,21 @@ p, li { white-space: pre-wrap; }
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="LoadFile">
     <property name="title">
      <string>Загрузить задания</string>
     </property>
+    <addaction name="actionTest"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>Справка</string>
     </property>
+    <addaction name="separator"/>
+    <addaction name="actionTest2"/>
+    <addaction name="actionTes3"/>
    </widget>
-   <addaction name="menu"/>
+   <addaction name="LoadFile"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -215,8 +219,29 @@ p, li { white-space: pre-wrap; }
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="test">
+   <property name="text">
+    <string>test</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>Test</string>
+   </property>
+  </action>
+  <action name="actionTest2">
+   <property name="text">
+    <string>Test2</string>
+   </property>
+  </action>
+  <action name="actionTes3">
+   <property name="text">
+    <string>Tes3</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

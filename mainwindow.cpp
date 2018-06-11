@@ -5,7 +5,7 @@
 using namespace std;
 
 int NUMG=1;
-int QuesNUM=4;
+int QuesNUM=4; //количество вопросов
 QString strNUMG=QString::number(NUMG);
 QString strQuesNUM=QString::number(QuesNUM);
 
@@ -19,11 +19,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->BackButton->setEnabled(false);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
     ui->EndButton->setEnabled(false);
+    connect(ui->actionTest,SIGNAL(triggered(bool)),this,SLOT(on_Test_clicked()));
+
+    //ui->mainToolBar->addWidget(ui->BackButton);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_LoadFile_clicked()
+{
+    ui->TestNameEdit->setText("test");
+}
+
+void MainWindow::on_Test_clicked()
+{
+    ui->TestNameEdit->setText("test");
 }
 
 void MainWindow::on_BackButton_clicked()
