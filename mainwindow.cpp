@@ -41,66 +41,72 @@ vector <Question> Questions;
 
 void MainWindow::on_LoadFile_clicked()
 {
+    ui->BackButton->setEnabled(false);
+    ui->NextButton->setEnabled(false);
+    ui->EndButton->setEnabled(false);
+    NUMG=1;
+    strNUMG=QString::number(NUMG);
     Questions.clear();
     QString FileName = QFileDialog::getOpenFileName(this,tr("Save Xml"), ".",tr("Xml files (*.xml)"));
     QFile file(FileName);
-        if (!file.open(QFile::ReadOnly | QFile::Text))
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        QMessageBox::warning(this,"Ошибка файла","Не удалось открыть файл",QMessageBox::Ok);
+    } else {
+        QXmlStreamReader xmlReader;
+        xmlReader.setDevice(&file);
+        xmlReader.readNext();
+        while(!xmlReader.atEnd())
         {
-            QMessageBox::warning(this,"Ошибка файла","Не удалось открыть файл",QMessageBox::Ok);
-        } else {
-            QXmlStreamReader xmlReader;
-            xmlReader.setDevice(&file);
-            xmlReader.readNext();
-            while(!xmlReader.atEnd())
+            if(xmlReader.isStartElement())
             {
-                if(xmlReader.isStartElement())
+                if(xmlReader.name() == "Name")
                 {
-                    if(xmlReader.name() == "Name")
-                    {
-                        ui->TestNameEdit->setText(xmlReader.readElementText());
-                    }
-                    else if(xmlReader.name() == "NUMG")
-                    {
-                        QuesNUM=xmlReader.readElementText().toInt(); //количество вопросов
-                        strQuesNUM=QString::number(QuesNUM);
-                        ui->label->setText(strNUMG + " из " + strQuesNUM);
-                        if(QuesNUM>1){
-                            ui->NextButton->setEnabled(true);
-                        } else {
-                            ui->EndButton->setEnabled(true);
-                        }
-                    }
-                    else if(xmlReader.name() == "NameQuestion"){
-                        q.name_question=xmlReader.readElementText();
-                        q.Answer.clear();
-                        delete []q.correct;
-                        delete []q.userAnswer;
-                        NumAnswer=0;
-                    }
-                    else if(xmlReader.name() == "NUMV")
-                    {
-                        c = xmlReader.readElementText().toInt();
-                        q.correct = new int[c];
-                        q.userAnswer = new int[c];
-                    }
-                    else if(xmlReader.name() == "Correct")
-                    {
-                        q.correct[NumAnswer]=xmlReader.readElementText().toInt();
-                        q.userAnswer[NumAnswer]=0;
-                        NumAnswer++;
-                    }
-                    else if(xmlReader.name() == "TextAnswer")
-                    {
-                        q.Answer.push_back(xmlReader.readElementText());
-                        if(NumAnswer==c){
-                            Questions.push_back(q);
-                        }
+                    ui->TestNameEdit->setText(xmlReader.readElementText());
+                }
+                else if(xmlReader.name() == "NUMG")
+                {
+                    QuesNUM=xmlReader.readElementText().toInt(); //количество вопросов
+                    strQuesNUM=QString::number(QuesNUM);
+                    ui->label->setText(strNUMG + " из " + strQuesNUM);
+                    if(QuesNUM>1){
+                        ui->NextButton->setEnabled(true);
+                    } else {
+                        ui->EndButton->setEnabled(true);
                     }
                 }
-                xmlReader.readNext();
+                else if(xmlReader.name() == "NameQuestion"){
+                    q.name_question=xmlReader.readElementText();
+                    q.Answer.clear();
+                    delete []q.correct;
+                    delete []q.userAnswer;
+                    NumAnswer=0;
+                }
+                else if(xmlReader.name() == "NUMV")
+                {
+                    c = xmlReader.readElementText().toInt();
+                    q.correct = new int[c];
+                    q.userAnswer = new int[c];
+                }
+                else if(xmlReader.name() == "Correct")
+                {
+                    q.correct[NumAnswer]=xmlReader.readElementText().toInt();
+                    q.userAnswer[NumAnswer]=0;
+                    NumAnswer++;
+                }
+                else if(xmlReader.name() == "TextAnswer")
+                {
+                    q.Answer.push_back(xmlReader.readElementText());
+                    if(NumAnswer==c){
+                        Questions.push_back(q);
+                    }
+                }
             }
-            file.close();
+            xmlReader.readNext();
         }
+        file.close();
+    }
+    ui->label->setText(strNUMG + " из " + strQuesNUM);
 }
 
 void MainWindow::on_BackButton_clicked()
