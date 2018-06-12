@@ -12,6 +12,9 @@ int NUMG=1;
 int QuesNUM;
 QString strNUMG=QString::number(NUMG);
 QString strQuesNUM;
+Question q;
+int NumAnswer;
+int c;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,9 +43,6 @@ void MainWindow::on_LoadFile_clicked()
 {
     Questions.clear();
     QString FileName = QFileDialog::getOpenFileName(this,tr("Save Xml"), ".",tr("Xml files (*.xml)"));
-    /*if(FileName != ""){
-        ui->TestNameEdit->setText(FileName);
-    }*/
     QFile file(FileName);
         if (!file.open(QFile::ReadOnly | QFile::Text))
         {
@@ -70,15 +70,30 @@ void MainWindow::on_LoadFile_clicked()
                             ui->EndButton->setEnabled(true);
                         }
                     }
+                    else if(xmlReader.name() == "NameQuestion"){
+                        q.name_question=xmlReader.readElementText();
+                        q.Answer.clear();
+                        delete []q.correct;
+                        delete []q.userAnswer;
+                        NumAnswer=0;
+                    }
                     else if(xmlReader.name() == "NUMV")
                     {
-                        QuesNUM=xmlReader.readElementText().toInt(); //количество вопросов
-                        strQuesNUM=QString::number(QuesNUM);
-                        ui->label->setText(strNUMG + " из " + strQuesNUM);
-                        if(QuesNUM>1){
-                            ui->NextButton->setEnabled(true);
-                        } else {
-                            ui->EndButton->setEnabled(true);
+                        c = xmlReader.readElementText().toInt();
+                        q.correct = new int[c];
+                        q.userAnswer = new int[c];
+                    }
+                    else if(xmlReader.name() == "Correct")
+                    {
+                        q.correct[NumAnswer]=xmlReader.readElementText().toInt();
+                        q.userAnswer[NumAnswer]=0;
+                        NumAnswer++;
+                    }
+                    else if(xmlReader.name() == "TextAnswer")
+                    {
+                        q.Answer.push_back(xmlReader.readElementText());
+                        if(NumAnswer==c){
+                            Questions.push_back(q);
                         }
                     }
                 }
