@@ -9,9 +9,9 @@
 using namespace std;
 
 int NUMG=1;
-int QuesNUM=4; //количество вопросов
+int QuesNUM;
 QString strNUMG=QString::number(NUMG);
-QString strQuesNUM=QString::number(QuesNUM);
+QString strQuesNUM;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->BackButton->setEnabled(false);
+    ui->NextButton->setEnabled(false);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
     ui->EndButton->setEnabled(false);
     connect(ui->actionLoadFile,SIGNAL(triggered(bool)),this,SLOT(on_LoadFile_clicked()));
@@ -29,8 +30,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+vector <QLineEdit*> Line;
+vector <QCheckBox*> Check;
+QString* temp;
+int* tempc;
+vector <Question> Questions;
+
 void MainWindow::on_LoadFile_clicked()
 {
+    Questions.clear();
     QString FileName = QFileDialog::getOpenFileName(this,tr("Save Xml"), ".",tr("Xml files (*.xml)"));
     /*if(FileName != ""){
         ui->TestNameEdit->setText(FileName);
@@ -51,6 +59,17 @@ void MainWindow::on_LoadFile_clicked()
                     {
                         ui->TestNameEdit->setText(xmlReader.readElementText());
                     }
+                    else if(xmlReader.name() == "NUMG")
+                    {
+                        QuesNUM=xmlReader.readElementText().toInt(); //количество вопросов
+                        strQuesNUM=QString::number(QuesNUM);
+                        ui->label->setText(strNUMG + " из " + strQuesNUM);
+                        if(QuesNUM>1){
+                            ui->NextButton->setEnabled(true);
+                        } else {
+                            ui->EndButton->setEnabled(true);
+                        }
+                    }
                 }
                 xmlReader.readNext();
             }
@@ -63,10 +82,7 @@ void MainWindow::on_BackButton_clicked()
     if (NUMG-1==1){
         ui->BackButton->setEnabled(false);
     }
-    else {
-        ui->NextButton->setEnabled(true);
-    }
-
+    ui->NextButton->setEnabled(true);
     NUMG--;
     strNUMG=QString::number(NUMG);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
@@ -100,10 +116,7 @@ void MainWindow::on_NextButton_clicked()
         ui->NextButton->setEnabled(false);
         ui->EndButton->setEnabled(true);
     }
-    else {
-        ui->BackButton->setEnabled(true);
-    }
-
+    ui->BackButton->setEnabled(true);
     NUMG++;
     strNUMG=QString::number(NUMG);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
