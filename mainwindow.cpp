@@ -70,6 +70,17 @@ void MainWindow::on_LoadFile_clicked()
                             ui->EndButton->setEnabled(true);
                         }
                     }
+                    else if(xmlReader.name() == "NUMV")
+                    {
+                        QuesNUM=xmlReader.readElementText().toInt(); //количество вопросов
+                        strQuesNUM=QString::number(QuesNUM);
+                        ui->label->setText(strNUMG + " из " + strQuesNUM);
+                        if(QuesNUM>1){
+                            ui->NextButton->setEnabled(true);
+                        } else {
+                            ui->EndButton->setEnabled(true);
+                        }
+                    }
                 }
                 xmlReader.readNext();
             }
