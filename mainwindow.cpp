@@ -172,5 +172,7 @@ void MainWindow::on_NextButton_clicked()
 
 void MainWindow::on_EndButton_clicked()
 {
-
+    ui->BackButton->setEnabled(false);
+    ui->NextButton->setEnabled(false);
+    ui->EndButton->setEnabled(false);
 }
