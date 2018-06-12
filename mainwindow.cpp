@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->BackButton->setEnabled(false);
     ui->NextButton->setEnabled(false);
-    ui->label->setText(strNUMG + " из " + strQuesNUM);
+    //ui->label->setText(strNUMG + " из " + strQuesNUM);
     ui->EndButton->setEnabled(false);
     connect(ui->actionLoadFile,SIGNAL(triggered(bool)),this,SLOT(on_LoadFile_clicked()));
 }
