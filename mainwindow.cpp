@@ -1,9 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "question.h"
 #include <QDebug>
 #include <QFileDialog>
 #include <QXmlStreamReader>
 #include <QMessageBox>
+#include <vector>
 using namespace std;
 
 int NUMG=1;
@@ -43,8 +45,6 @@ void MainWindow::on_LoadFile_clicked()
             xmlReader.readNext();
             while(!xmlReader.atEnd())
             {
-                /* Проверяем, является ли элемент началом тега
-                 * */
                 if(xmlReader.isStartElement())
                 {
                     if(xmlReader.name() == "Name")
