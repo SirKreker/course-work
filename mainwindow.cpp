@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QFileDialog>
+#include <QXmlStreamReader>
+#include <QMessageBox>
 using namespace std;
 
 int NUMG=1;
@@ -28,9 +30,32 @@ MainWindow::~MainWindow()
 void MainWindow::on_LoadFile_clicked()
 {
     QString FileName = QFileDialog::getOpenFileName(this,tr("Save Xml"), ".",tr("Xml files (*.xml)"));
-    if(FileName != ""){
+    /*if(FileName != ""){
         ui->TestNameEdit->setText(FileName);
-    }
+    }*/
+    QFile file(FileName);
+        if (!file.open(QFile::ReadOnly | QFile::Text))
+        {
+            QMessageBox::warning(this,"Ошибка файла","Не удалось открыть файл",QMessageBox::Ok);
+        } else {
+            QXmlStreamReader xmlReader;
+            xmlReader.setDevice(&file);
+            xmlReader.readNext();
+            while(!xmlReader.atEnd())
+            {
+                /* Проверяем, является ли элемент началом тега
+                 * */
+                if(xmlReader.isStartElement())
+                {
+                    if(xmlReader.name() == "Name")
+                    {
+                        ui->TestNameEdit->setText(xmlReader.readElementText());
+                    }
+                }
+                xmlReader.readNext();
+            }
+            file.close();
+        }
 }
 
 void MainWindow::on_BackButton_clicked()
