@@ -9,8 +9,6 @@ int QuesNUM=4; //количество вопросов
 QString strNUMG=QString::number(NUMG);
 QString strQuesNUM=QString::number(QuesNUM);
 
-//QString str5 = QFileDialog::getOpenFileName(0, "Open Dialog", "", "*.xml");
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -19,9 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->BackButton->setEnabled(false);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
     ui->EndButton->setEnabled(false);
-    connect(ui->actionTest,SIGNAL(triggered(bool)),this,SLOT(on_Test_clicked()));
-
-    //ui->mainToolBar->addWidget(ui->BackButton);
+    connect(ui->actionLoadFile,SIGNAL(triggered(bool)),this,SLOT(on_LoadFile_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -31,12 +27,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_LoadFile_clicked()
 {
-    ui->TestNameEdit->setText("test");
-}
-
-void MainWindow::on_Test_clicked()
-{
-    ui->TestNameEdit->setText("test");
+    QString FileName = QFileDialog::getOpenFileName(this,tr("Save Xml"), ".",tr("Xml files (*.xml)"));
+    if(FileName != ""){
+        ui->TestNameEdit->setText(FileName);
+    }
 }
 
 void MainWindow::on_BackButton_clicked()
