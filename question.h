@@ -10,7 +10,7 @@ struct Question
     QString name_question;
     vector <QString> Answer;
     int* correct;
-    int* userAnswer;
+
 };
 
 #endif // QUESTION_H
