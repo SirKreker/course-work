@@ -9,7 +9,8 @@ struct Question
 {
     QString name_question;
     vector <QString> Answer;
-    int* correct;
+    vector <QString> correct;
+    vector <QString> userAnswer;
 
 };
 

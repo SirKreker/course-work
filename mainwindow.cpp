@@ -16,7 +16,6 @@ Question q;
 int NumAnswer;
 int c;
 int k;
-int* userAnswer;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -82,27 +81,20 @@ void MainWindow::on_LoadFile_clicked()
                 else if(xmlReader.name() == "NameQuestion"){
                     q.name_question=xmlReader.readElementText();
                     q.Answer.clear();
-                    delete []q.correct;
-                    delete []userAnswer;
+                    q.correct.clear();
+                    q.userAnswer.clear();
                     NumAnswer=0;
                 }
                 else if(xmlReader.name() == "NUMV")
                 {
                     c = xmlReader.readElementText().toInt();
-                    q.correct = new int[c];
-                    userAnswer = new int[c];
+                    //q.correct = new int[c];
+                    //userAnswer = new int[c];
                 }
                 else if(xmlReader.name() == "Correct")
                 {
-                    int magic=xmlReader.readElementText().toInt();
-                    qDebug()<<"magic="<<magic;
-
-                    if(magic==0){
-                        q.correct[NumAnswer]=0;
-                    }else if(magic==1){
-                        q.correct[NumAnswer]=1;
-                    }
-
+                    q.correct.push_back(xmlReader.readElementText());
+                    q.userAnswer.push_back("0");
                     NumAnswer++;
                 }
                 else if(xmlReader.name() == "TextAnswer")
@@ -127,7 +119,6 @@ void MainWindow::on_LoadFile_clicked()
         delete child;
     }
     k=Questions.at(NUMG-1).Answer.size();
-    //qDebug()<<"k="<<k;
     for(int i=1;i<=k;i++)
     {
         QCheckBox *checkBox = new QCheckBox(this);
@@ -139,25 +130,14 @@ void MainWindow::on_LoadFile_clicked()
         Line.push_back(lineEdit);
         Check.push_back(checkBox);
     }
-    for(int i=0;i<Questions.at(NUMG-1).Answer.size();i++)
+    for(int i=0;i<k;i++)
     {
         Line.at(i)->setText(Questions.at(NUMG-1).Answer.at(i));
-        if(Questions.at(NUMG-1).correct[i]==0)
+        if(Questions.at(NUMG-1).userAnswer.at(i)=="0")
             Check.at(i)->setChecked(false);
-        else if(Questions.at(NUMG-1).correct[i]==1)
+        else if(Questions.at(NUMG-1).userAnswer.at(i)=="1")
             Check.at(i)->setChecked(true);
     }
-    qDebug()<<Questions.at(NUMG-1).Answer.size();
-    qDebug()<<Questions.at(NUMG-1).correct[-1];
-    qDebug()<<Questions.at(NUMG-1).correct[0];
-    qDebug()<<Questions.at(NUMG-1).correct[1];
-    qDebug()<<Questions.at(NUMG-1).correct[2];
-    qDebug()<<Questions.at(NUMG-1).correct[3];
-    //qDebug()<<Questions.at(NUMG-1).userAnswer[-1];
-    //qDebug()<<Questions.at(NUMG-1).userAnswer[0];
-    //qDebug()<<Questions.at(NUMG-1).userAnswer[1];
-    //qDebug()<<Questions.at(NUMG-1).userAnswer[2];
-
 }
 
 void MainWindow::on_BackButton_clicked()
@@ -172,7 +152,7 @@ void MainWindow::on_BackButton_clicked()
 
     //QString str = ui->NumVarSpinBox->text();
     //int k = str.toInt();
-    int k=4; //количество вариантов ответа
+    /*int k=4;
     QLayoutItem *child;
     while((child = ui->AnswerLayout->takeAt(0))!=0)
     {
@@ -189,6 +169,33 @@ void MainWindow::on_BackButton_clicked()
         ui->AnswerLayout->addWidget(lineEdit);
         //Line.push_back(lineEdit);
         //Check.push_back(checkBox);
+    }*/
+    ui->NameQuestEdit->setText(Questions.at(NUMG-1).name_question);
+    QLayoutItem *child;
+    while((child = ui->AnswerLayout->takeAt(0))!=0)
+    {
+        delete child->widget();
+        delete child;
+    }
+    k=Questions.at(NUMG-1).Answer.size();
+    for(int i=1;i<=k;i++)
+    {
+        QCheckBox *checkBox = new QCheckBox(this);
+        QLineEdit *lineEdit = new QLineEdit(this);
+        checkBox->setText(QString::number(i)+")");
+        lineEdit->setReadOnly(true);
+        ui->AnswerLayout->addWidget(checkBox);
+        ui->AnswerLayout->addWidget(lineEdit);
+        Line.push_back(lineEdit);
+        Check.push_back(checkBox);
+    }
+    for(int i=0;i<k;i++)
+    {
+        Line.at(i)->setText(Questions.at(NUMG-1).Answer.at(i));
+        if(Questions.at(NUMG-1).userAnswer.at(i)=="0")
+            Check.at(i)->setChecked(false);
+        else if(Questions.at(NUMG-1).userAnswer.at(i)=="1")
+            Check.at(i)->setChecked(true);
     }
 
 }
@@ -206,7 +213,7 @@ void MainWindow::on_NextButton_clicked()
 
     //QString str = ui->NumVarSpinBox->text();
     //int k = str.toInt();
-    int k=8; //количество вариантов ответа
+    /*int k=8;
     QLayoutItem *child;
     while((child = ui->AnswerLayout->takeAt(0))!=0)
     {
@@ -223,8 +230,35 @@ void MainWindow::on_NextButton_clicked()
         ui->AnswerLayout->addWidget(lineEdit);
         //Line.push_back(lineEdit);
         //Check.push_back(checkBox);
-    }
+    }*/
 
+    ui->NameQuestEdit->setText(Questions.at(NUMG-1).name_question);
+    QLayoutItem *child;
+    while((child = ui->AnswerLayout->takeAt(0))!=0)
+    {
+        delete child->widget();
+        delete child;
+    }
+    k=Questions.at(NUMG-1).Answer.size();
+    for(int i=1;i<=k;i++)
+    {
+        QCheckBox *checkBox = new QCheckBox(this);
+        QLineEdit *lineEdit = new QLineEdit(this);
+        checkBox->setText(QString::number(i)+")");
+        lineEdit->setReadOnly(true);
+        ui->AnswerLayout->addWidget(checkBox);
+        ui->AnswerLayout->addWidget(lineEdit);
+        Line.push_back(lineEdit);
+        Check.push_back(checkBox);
+    }
+    for(int i=0;i<k;i++)
+    {
+        Line.at(i)->setText(Questions.at(NUMG-1).Answer.at(i));
+        if(Questions.at(NUMG-1).userAnswer.at(i)=="0")
+            Check.at(i)->setChecked(false);
+        else if(Questions.at(NUMG-1).userAnswer.at(i)=="1")
+            Check.at(i)->setChecked(true);
+    }
 }
 
 void MainWindow::on_EndButton_clicked()
