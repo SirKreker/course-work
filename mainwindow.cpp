@@ -247,7 +247,7 @@ void MainWindow::on_EndButton_clicked()
 {
     ui->BackButton->setEnabled(false);
     ui->NextButton->setEnabled(false);
-    //ui->EndButton->setEnabled(false);
+    ui->EndButton->setEnabled(false);
     k=Questions.at(NUMG-1).userAnswer.size();
     for(int i=0;i<k;i++)
     {
