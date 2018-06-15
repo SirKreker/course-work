@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->BackButton->setEnabled(false);
     ui->NextButton->setEnabled(false);
-    //ui->label->setText(strNUMG + " из " + strQuesNUM);
     ui->EndButton->setEnabled(false);
     connect(ui->actionLoadFile,SIGNAL(triggered(bool)),this,SLOT(on_LoadFile_clicked()));
 }
@@ -42,13 +41,15 @@ vector <Question> Questions;
 
 void MainWindow::on_LoadFile_clicked()
 {
+    Line.clear();
+    Check.clear();
     ui->BackButton->setEnabled(false);
     ui->NextButton->setEnabled(false);
     ui->EndButton->setEnabled(false);
     NUMG=1;
     strNUMG=QString::number(NUMG);
     Questions.clear();
-    QString FileName = QFileDialog::getOpenFileName(this,tr("Save Xml"), ".",tr("Xml files (*.xml)"));
+    QString FileName = QFileDialog::getOpenFileName(this,tr("Открыть xml файл"), ".",tr("Xml files (*.xml)"));
     QFile file(FileName);
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -68,8 +69,6 @@ void MainWindow::on_LoadFile_clicked()
                 else if(xmlReader.name() == "NUMG")
                 {
                     QuesNUM=xmlReader.readElementText().toInt(); //количество вопросов
-                    //qDebug()<<QuesNUM;
-                    //qDebug()<<xmlReader.readElementText().toInt();
                     strQuesNUM=QString::number(QuesNUM);
                     ui->label->setText(strNUMG + " из " + strQuesNUM);
                     if(QuesNUM>1){
@@ -88,8 +87,6 @@ void MainWindow::on_LoadFile_clicked()
                 else if(xmlReader.name() == "NUMV")
                 {
                     c = xmlReader.readElementText().toInt();
-                    //q.correct = new int[c];
-                    //userAnswer = new int[c];
                 }
                 else if(xmlReader.name() == "Correct")
                 {
@@ -142,6 +139,20 @@ void MainWindow::on_LoadFile_clicked()
 
 void MainWindow::on_BackButton_clicked()
 {
+    k=Questions.at(NUMG-1).userAnswer.size();
+    for(int i=0;i<k;i++)
+    {
+        if(Check.at(i)->checkState())
+        {
+            Questions.at(NUMG-1).userAnswer.at(i)="1";
+        }
+        else
+        {
+            Questions.at(NUMG-1).userAnswer.at(i)="0";
+        }
+    }
+    Line.clear();
+    Check.clear();
     if (NUMG-1==1){
         ui->BackButton->setEnabled(false);
     }
@@ -149,27 +160,6 @@ void MainWindow::on_BackButton_clicked()
     NUMG--;
     strNUMG=QString::number(NUMG);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
-
-    //QString str = ui->NumVarSpinBox->text();
-    //int k = str.toInt();
-    /*int k=4;
-    QLayoutItem *child;
-    while((child = ui->AnswerLayout->takeAt(0))!=0)
-    {
-        delete child->widget();
-        delete child;
-    }
-    for(int i=1;i<=k;i++)
-    {
-        QCheckBox *checkBox = new QCheckBox(this);
-        QLineEdit *lineEdit = new QLineEdit(this);
-        checkBox->setText(QString::number(i)+")");
-        lineEdit->setReadOnly(true);
-        ui->AnswerLayout->addWidget(checkBox);
-        ui->AnswerLayout->addWidget(lineEdit);
-        //Line.push_back(lineEdit);
-        //Check.push_back(checkBox);
-    }*/
     ui->NameQuestEdit->setText(Questions.at(NUMG-1).name_question);
     QLayoutItem *child;
     while((child = ui->AnswerLayout->takeAt(0))!=0)
@@ -202,6 +192,20 @@ void MainWindow::on_BackButton_clicked()
 
 void MainWindow::on_NextButton_clicked()
 {
+    k=Questions.at(NUMG-1).userAnswer.size();
+    for(int i=0;i<k;i++)
+    {
+        if(Check.at(i)->checkState())
+        {
+            Questions.at(NUMG-1).userAnswer.at(i)="1";
+        }
+        else
+        {
+            Questions.at(NUMG-1).userAnswer.at(i)="0";
+        }
+    }
+    Line.clear();
+    Check.clear();
     if (NUMG+1==QuesNUM){
         ui->NextButton->setEnabled(false);
         ui->EndButton->setEnabled(true);
@@ -210,28 +214,6 @@ void MainWindow::on_NextButton_clicked()
     NUMG++;
     strNUMG=QString::number(NUMG);
     ui->label->setText(strNUMG + " из " + strQuesNUM);
-
-    //QString str = ui->NumVarSpinBox->text();
-    //int k = str.toInt();
-    /*int k=8;
-    QLayoutItem *child;
-    while((child = ui->AnswerLayout->takeAt(0))!=0)
-    {
-        delete child->widget();
-        delete child;
-    }
-    for(int i=1;i<=k;i++)
-    {
-        QCheckBox *checkBox = new QCheckBox(this);
-        QLineEdit *lineEdit = new QLineEdit(this);
-        checkBox->setText(QString::number(i)+")");
-        lineEdit->setReadOnly(true);
-        ui->AnswerLayout->addWidget(checkBox);
-        ui->AnswerLayout->addWidget(lineEdit);
-        //Line.push_back(lineEdit);
-        //Check.push_back(checkBox);
-    }*/
-
     ui->NameQuestEdit->setText(Questions.at(NUMG-1).name_question);
     QLayoutItem *child;
     while((child = ui->AnswerLayout->takeAt(0))!=0)
@@ -265,5 +247,36 @@ void MainWindow::on_EndButton_clicked()
 {
     ui->BackButton->setEnabled(false);
     ui->NextButton->setEnabled(false);
-    ui->EndButton->setEnabled(false);
+    //ui->EndButton->setEnabled(false);
+    k=Questions.at(NUMG-1).userAnswer.size();
+    for(int i=0;i<k;i++)
+    {
+        if(Check.at(i)->checkState())
+        {
+            Questions.at(NUMG-1).userAnswer.at(i)="1";
+        }
+        else
+        {
+            Questions.at(NUMG-1).userAnswer.at(i)="0";
+        }
+    }
+    int Result=0;
+    int answerResult;
+    for (int i=0;i<QuesNUM;i++){
+        k=Questions.at(i).userAnswer.size();
+        answerResult=0;
+        for (int j=0;j<k;j++){
+            if (Questions.at(i).userAnswer.at(j)!=Questions.at(i).correct.at(j)){
+                answerResult++;
+            }
+        }
+        if (answerResult==0){
+            Result++;
+        }
+    }
+    QString strResult=QString::number(Result);
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Результат");
+    msgBox.setText("Вы ответили правильно на " + strResult + " из " + strQuesNUM+" вопросов");
+    msgBox.exec();
 }
