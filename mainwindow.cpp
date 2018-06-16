@@ -2,10 +2,14 @@
 #include "ui_mainwindow.h"
 #include "question.h"
 #include <QDebug>
+#include <stdlib.h>
 #include <QFileDialog>
 #include <QXmlStreamReader>
 #include <QMessageBox>
 #include <vector>
+#include <QFile>
+#include <QCoreApplication>
+#include <QTextStream>
 using namespace std;
 
 int NUMG=1;
@@ -26,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->NextButton->setEnabled(false);
     ui->EndButton->setEnabled(false);
     connect(ui->actionLoadFile,SIGNAL(triggered(bool)),this,SLOT(on_LoadFile_clicked()));
+    //qDebug()<<getenv("USERNAME");
 }
 
 MainWindow::~MainWindow()
@@ -50,6 +55,7 @@ void MainWindow::on_LoadFile_clicked()
     strNUMG=QString::number(NUMG);
     Questions.clear();
     QString FileName = QFileDialog::getOpenFileName(this,tr("Открыть xml файл"), ".",tr("Xml files (*.xml)"));
+    qDebug()<<FileName;
     QFile file(FileName);
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -249,6 +255,12 @@ void MainWindow::on_EndButton_clicked()
     ui->NextButton->setEnabled(false);
     ui->EndButton->setEnabled(false);
     k=Questions.at(NUMG-1).userAnswer.size();
+    QString FileResult="C:/Users/Илья1/Desktop/Test.txt";
+    QFile fileRes(FileResult);
+    fileRes.open(QFile::WriteOnly | QIODevice::Text);
+    QTextStream out(&fileRes);
+    QString t=getenv("USERNAME");
+    out<<t<<endl<<strQuesNUM;
     for(int i=0;i<k;i++)
     {
         if(Check.at(i)->checkState())
@@ -270,13 +282,19 @@ void MainWindow::on_EndButton_clicked()
                 answerResult++;
             }
         }
+        out<<endl;
         if (answerResult==0){
             Result++;
+            out<<"1";
+        } else {
+            out<<"0";
         }
     }
     QString strResult=QString::number(Result);
+
+    fileRes.close();
     QMessageBox msgBox;
     msgBox.setWindowTitle("Результат");
-    msgBox.setText("Вы ответили правильно на " + strResult + " из " + strQuesNUM+" вопросов");
+    msgBox.setText("Вы ответили правильно на " + strResult + " из " + strQuesNUM +" вопросов");
     msgBox.exec();
 }
