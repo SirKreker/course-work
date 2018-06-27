@@ -10,6 +10,12 @@
 #include <QFile>
 #include <QCoreApplication>
 #include <QTextStream>
+#include <QDate>
+#include <QTime>
+#include <iostream>
+#include <QDir>
+#include <QDirIterator>
+
 using namespace std;
 
 int NUMG=1;
@@ -17,6 +23,7 @@ int QuesNUM;
 QString strNUMG=QString::number(NUMG);
 QString strQuesNUM;
 Question q;
+QString TestName;
 int NumAnswer;
 int c;
 int k;
@@ -30,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->NextButton->setEnabled(false);
     ui->EndButton->setEnabled(false);
     connect(ui->actionLoadFile,SIGNAL(triggered(bool)),this,SLOT(on_LoadFile_clicked()));
-    //qDebug()<<getenv("USERNAME");
 }
 
 MainWindow::~MainWindow()
@@ -70,7 +76,8 @@ void MainWindow::on_LoadFile_clicked()
             {
                 if(xmlReader.name() == "Name")
                 {
-                    ui->TestNameEdit->setText(xmlReader.readElementText());
+                    TestName=xmlReader.readElementText();
+                    ui->TestNameEdit->setText(TestName);
                 }
                 else if(xmlReader.name() == "NUMG")
                 {
@@ -255,12 +262,17 @@ void MainWindow::on_EndButton_clicked()
     ui->NextButton->setEnabled(false);
     ui->EndButton->setEnabled(false);
     k=Questions.at(NUMG-1).userAnswer.size();
-    QString FileResult="C:/Users/Илья1/Desktop/Test.txt";
+    QTime Time = QTime::currentTime();
+    QString strTime = Time.toString("hh.mm.ss");
+    QDate Date = QDate::currentDate();
+    QString strDate = Date.toString("dd.MM.yyyy");
+    QString UserName=getenv("USERNAME");
+    QString FileResult="C:/Users/Илья1/Desktop/Test/";
+    FileResult+=UserName+"_"+strTime+"_"+strDate+".txt";
     QFile fileRes(FileResult);
     fileRes.open(QFile::WriteOnly | QIODevice::Text);
     QTextStream out(&fileRes);
-    QString t=getenv("USERNAME");
-    out<<t<<endl<<strQuesNUM;
+    out<<TestName<<endl<<UserName<<endl<<strTime<<endl<<strDate<<endl<<strQuesNUM;
     for(int i=0;i<k;i++)
     {
         if(Check.at(i)->checkState())
